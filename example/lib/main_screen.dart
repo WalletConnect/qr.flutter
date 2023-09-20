@@ -20,14 +20,14 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    const String message =
+    const message =
         // ignore: lines_longer_than_80_chars
         'Hey this is a QR code. Change this value in the main_screen.dart file.';
 
-    final FutureBuilder<ui.Image> qrFutureBuilder = FutureBuilder<ui.Image>(
+    final qrFutureBuilder = FutureBuilder<ui.Image>(
       future: _loadOverlayImage(),
-      builder: (BuildContext ctx, AsyncSnapshot<ui.Image> snapshot) {
-        const double size = 280.0;
+      builder: (ctx, snapshot) {
+        const size = 280.0;
         if (!snapshot.hasData) {
           return const SizedBox(width: size, height: size);
         }
@@ -79,8 +79,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<ui.Image> _loadOverlayImage() async {
-    final Completer<ui.Image> completer = Completer<ui.Image>();
-    final ByteData byteData =
+    final completer = Completer<ui.Image>();
+    final byteData =
         await rootBundle.load('assets/images/4.0x/logo_yakka.png');
     ui.decodeImageFromList(byteData.buffer.asUint8List(), completer.complete);
     return completer.future;
