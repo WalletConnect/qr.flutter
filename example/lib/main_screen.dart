@@ -9,7 +9,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_flutter_wc/qr_flutter.dart';
 
 /// This is the screen that you'll see when the app starts
 class MainScreen extends StatefulWidget {
@@ -80,8 +80,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<ui.Image> _loadOverlayImage() async {
     final completer = Completer<ui.Image>();
-    final byteData =
-        await rootBundle.load('assets/images/4.0x/logo_yakka.png');
+    final byteData = await rootBundle.load('assets/images/4.0x/logo_yakka.png');
     ui.decodeImageFromList(byteData.buffer.asUint8List(), completer.complete);
     return completer.future;
   }

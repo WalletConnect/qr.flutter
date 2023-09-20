@@ -1,4 +1,4 @@
-name: qr_flutter
+name: qr_flutter_wc
 description: >
   QR.Flutter is a Flutter library for simple and fast QR code rendering via a
   Widget or custom painter.
