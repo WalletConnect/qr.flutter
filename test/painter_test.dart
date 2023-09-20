@@ -14,7 +14,6 @@ void main() {
     final painter = QrPainter(
       data: 'The painter is this thing',
       version: QrVersions.auto,
-      gapless: true,
       errorCorrectionLevel: QrErrorCorrectLevel.L,
     );
     ByteData? imageData;
