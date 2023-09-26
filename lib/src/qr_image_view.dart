@@ -23,7 +23,6 @@ class QrImageView extends StatefulWidget {
     required String data,
     super.key,
     this.size,
-    this.padding = const EdgeInsets.all(10.0),
     this.backgroundColor = Colors.transparent,
     this.version = QrVersions.auto,
     this.errorCorrectionLevel = QrErrorCorrectLevel.L,
@@ -57,7 +56,6 @@ class QrImageView extends StatefulWidget {
     required QrCode qr,
     super.key,
     this.size,
-    this.padding = const EdgeInsets.all(10.0),
     this.backgroundColor = Colors.transparent,
     this.version = QrVersions.auto,
     this.errorCorrectionLevel = QrErrorCorrectLevel.L,
@@ -99,9 +97,6 @@ class QrImageView extends StatefulWidget {
 
   /// The QR code error correction level to use.
   final int errorCorrectionLevel;
-
-  /// The external padding between the edge of the widget and the content.
-  final EdgeInsets padding;
 
   /// The intended size of the widget.
   final double? size;
@@ -218,7 +213,6 @@ class _QrImageViewState extends State<QrImageView> {
       qr: _qr!,
       // ignore: deprecated_member_use_from_same_package
       color: widget.foregroundColor,
-      gapless: widget.gapless,
       embeddedImageStyle: widget.embeddedImageStyle,
       embeddedImage: image,
       eyeStyle: widget.eyeStyle,
@@ -227,7 +221,6 @@ class _QrImageViewState extends State<QrImageView> {
     return _QrContentView(
       edgeLength: edgeLength,
       backgroundColor: widget.backgroundColor,
-      padding: widget.padding,
       semanticsLabel: widget.semanticsLabel,
       child: CustomPaint(painter: painter),
     );
@@ -247,7 +240,6 @@ class _QrImageViewState extends State<QrImageView> {
     return _QrContentView(
       edgeLength: errorSideLength,
       backgroundColor: widget.backgroundColor,
-      padding: widget.padding,
       semanticsLabel: widget.semanticsLabel,
       child: errorWidget,
     );
@@ -293,7 +285,6 @@ class _QrContentView extends StatelessWidget {
     required this.edgeLength,
     required this.child,
     this.backgroundColor,
-    this.padding,
     this.semanticsLabel,
   });
 
@@ -302,9 +293,6 @@ class _QrContentView extends StatelessWidget {
 
   /// The background color of the containing widget.
   final Color? backgroundColor;
-
-  /// The padding that surrounds the child widget.
-  final EdgeInsets? padding;
 
   /// The child widget.
   final Widget child;
@@ -321,10 +309,7 @@ class _QrContentView extends StatelessWidget {
         width: edgeLength,
         height: edgeLength,
         color: backgroundColor,
-        child: Padding(
-          padding: padding!,
-          child: child,
-        ),
+        child: child,
       ),
     );
   }
