@@ -169,8 +169,10 @@ class _QrImageViewState extends State<QrImageView> {
       _qr = _validationResult.isValid ? _validationResult.qrCode : null;
     } else if (widget._qrCode != null) {
       _qr = widget._qrCode;
-      _validationResult =
-          QrValidationResult(status: QrValidationStatus.valid, qrCode: _qr);
+      _validationResult = QrValidationResult(
+        status: QrValidationStatus.valid,
+        qrCode: _qr,
+      );
     }
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -193,11 +195,9 @@ class _QrImageViewState extends State<QrImageView> {
                     : _qrWidget(null, widgetSize);
               }
               if (snapshot.hasData) {
-                debugPrint('loaded image');
-                final loadedImage = snapshot.data;
-                return _qrWidget(loadedImage, widgetSize);
+                return _qrWidget(snapshot.data, widgetSize);
               } else {
-                return Container();
+                return _qrWidget(null, widgetSize);
               }
             },
           );
@@ -211,8 +211,6 @@ class _QrImageViewState extends State<QrImageView> {
   Widget _qrWidget(ui.Image? image, double edgeLength) {
     final painter = QrPainter.withQr(
       qr: _qr!,
-      // ignore: deprecated_member_use_from_same_package
-      color: widget.foregroundColor,
       embeddedImageStyle: widget.embeddedImageStyle,
       embeddedImage: image,
       eyeStyle: widget.eyeStyle,
@@ -222,7 +220,10 @@ class _QrImageViewState extends State<QrImageView> {
       edgeLength: edgeLength,
       backgroundColor: widget.backgroundColor,
       semanticsLabel: widget.semanticsLabel,
-      child: CustomPaint(painter: painter),
+      child: CustomPaint(
+        size: Size(edgeLength, edgeLength),
+        painter: painter,
+      ),
     );
   }
 

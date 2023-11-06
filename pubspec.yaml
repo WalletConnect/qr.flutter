@@ -1,8 +1,8 @@
 name: qr_flutter_wc
 description: >
-  QR.Flutter is a Flutter library for simple and fast QR code rendering via a
-  Widget or custom painter.
-version: 0.0.1
+  qr_flutter_wc is a Flutter library for simple and fast QR code rendering via a
+  Widget or custom painter kindly forked from https://github.com/lukef/qr.flutter to meet WalletConnect requirements
+version: 0.0.2
 homepage: https://github.com/WalletConnect/qr.flutter
 
 environment:

@@ -17,12 +17,7 @@ import 'qr_versions.dart';
 import 'types.dart';
 import 'validator.dart';
 
-// ignore_for_file: deprecated_member_use_from_same_package
-
 const int _finderPatternLimit = 7;
-
-// default color for the qr code pixels
-const Color? _qrDefaultColor = null;
 
 /// A [CustomPainter] object that you can use to paint a QR code.
 class QrPainter extends CustomPainter {
@@ -41,12 +36,6 @@ class QrPainter extends CustomPainter {
       dataModuleShape: QrDataModuleShape.square,
       color: Color(0xFF000000),
     ),
-    @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
-    this.color = _qrDefaultColor,
-    @Deprecated(
-      'You should use the background color value of your container widget',
-    )
-    this.emptyColor,
   }) : assert(
           QrVersions.isSupportedVersion(version),
           'QR code version $version is not supported',
@@ -69,12 +58,6 @@ class QrPainter extends CustomPainter {
       dataModuleShape: QrDataModuleShape.square,
       color: Color(0xFF000000),
     ),
-    @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
-    this.color = _qrDefaultColor,
-    @Deprecated(
-      'You should use the background color value of your container widget',
-    )
-    this.emptyColor,
   })  : _qr = qr,
         version = qr.typeNumber,
         errorCorrectionLevel = qr.errorCorrectLevel {
@@ -112,20 +95,10 @@ class QrPainter extends CustomPainter {
   late final int _calcVersion;
 
   /// The size of the 'gap' between the pixels
-  final double _gapSize = 0.25;
+  final double _gapSize = 0.5;
 
   /// Cache for all of the [Paint] objects.
   final PaintCache _paintCache = PaintCache();
-
-  /// The color of the squares.
-  @Deprecated('use colors in eyeStyle and dataModuleStyle instead')
-  final Color? color; // the color of the dark squares
-
-  /// The color of the non-squares (background).
-  @Deprecated(
-    'You should use the background color value of your container widget',
-  )
-  final Color? emptyColor; // the other color
 
   void _init(String data) {
     if (!QrVersions.isSupportedVersion(version)) {
@@ -277,7 +250,7 @@ class QrPainter extends CustomPainter {
         // paint a pixel
         left = paintMetrics.inset + (x * (paintMetrics.pixelSize + _gapSize));
         top = paintMetrics.inset + (y * (paintMetrics.pixelSize + _gapSize));
-        var pixelHTweak = 0.5;
+        var pixelHTweak = _gapSize;
         var pixelVTweak = 0.0;
         // if (_hasAdjacentHorizontalPixel(x, y, _qr!.moduleCount)) {
         //   pixelHTweak = 0.5;
@@ -368,32 +341,15 @@ class QrPainter extends CustomPainter {
       position: position,
     )!;
     outerPaint.strokeWidth = metrics.pixelSize;
-    outerPaint.color = color != null ? color! : eyeStyle.color!;
-
-    final innerPaint = _paintCache.firstPaint(QrCodeElement.finderPatternInner,
-        position: position)!;
-    innerPaint.strokeWidth = metrics.pixelSize;
-    innerPaint.color = emptyColor ?? const Color(0x00ffffff);
+    outerPaint.color = eyeStyle.color!;
 
     final dotPaint = _paintCache.firstPaint(
       QrCodeElement.finderPatternDot,
       position: position,
     );
-    if (color != null) {
-      dotPaint!.color = color!;
-    } else {
-      dotPaint!.color = eyeStyle.color!;
-    }
+    dotPaint!.color = eyeStyle.color!;
 
     final outerRect = Rect.fromLTWH(offset.dx, offset.dy, radius, radius);
-
-    final innerRadius = radius - (2 * metrics.pixelSize);
-    final innerRect = Rect.fromLTWH(
-      offset.dx + metrics.pixelSize,
-      offset.dy + metrics.pixelSize,
-      innerRadius,
-      innerRadius,
-    );
 
     final gap = metrics.pixelSize * 2;
     final dotSize = radius - gap - (2 * strokeAdjust);
@@ -406,7 +362,6 @@ class QrPainter extends CustomPainter {
 
     if (eyeStyle.eyeShape == QrEyeShape.square) {
       canvas.drawRect(outerRect, outerPaint);
-      canvas.drawRect(innerRect, innerPaint);
       canvas.drawRect(dotRect, dotPaint);
     } else {
       final roundedOuterStrokeRect = RRect.fromRectAndRadius(
@@ -414,12 +369,6 @@ class QrPainter extends CustomPainter {
         Radius.circular(radius / 2.5),
       );
       canvas.drawRRect(roundedOuterStrokeRect, outerPaint);
-
-      final roundedInnerStrokeRect = RRect.fromRectAndRadius(
-        outerRect,
-        Radius.circular(innerRadius / 2.5),
-      );
-      canvas.drawRRect(roundedInnerStrokeRect, innerPaint);
 
       final roundedDotStrokeRect = RRect.fromRectAndRadius(
         dotRect,
@@ -532,7 +481,7 @@ class _PaintMetrics {
   void _calculateMetrics() {
     final gapTotal = (moduleCount - 1) * gapSize;
     final pixelSize = (containerSize - gapTotal) / moduleCount;
-    _pixelSize = (pixelSize * 2).roundToDouble() / 2;
+    _pixelSize = (pixelSize * 2.0) / 2;
     _innerContentSize = (_pixelSize * moduleCount) + gapTotal;
     _inset = (containerSize - _innerContentSize) / 2;
   }
