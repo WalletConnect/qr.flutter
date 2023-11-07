@@ -1,3 +1,7 @@
+# 0.0.3
+
+- Just metadata changes
+  
 # 0.0.2
 
 - Corrections on calculations for gap and data modules
